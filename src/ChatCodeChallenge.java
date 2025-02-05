@@ -1,6 +1,11 @@
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class ChatCodeChallenge {
 
@@ -20,22 +25,59 @@ public class ChatCodeChallenge {
             }
         }
 
-        return Map.entry(maxOcurrence, maxValue%2 == 0);
+        return Map.entry(maxOcurrence, maxValue%2 != 0);
 
+    }
+
+    public static void maxCharacterRepeatedAndIsOdd(String phrase) {
+
+        Optional<Map.Entry<String, Integer>> dictionary = Arrays.stream(phrase.split(""))
+                .collect(Collectors.toMap(
+                        x-> x.toLowerCase(),
+                        x -> 1,
+                        Integer::sum
+
+                ))
+                .entrySet()
+                .stream().max(Map.Entry.comparingByValue());
+
+        boolean isOdd = dictionary.get().getValue() != 0;
+
+        dictionary.ifPresent(x-> System.out.println("The most common character is: '" + x.getKey() +
+                "' and is a number odd of times repeated? R//" + isOdd));
+
+
+
+    }
+
+    public static List<Integer> gradingStudents(List<Integer> grades) {
+
+        List<Integer> listStudents = new ArrayList<>();
+
+        for (int i = 1; i < grades.size(); i++) {
+
+            if (grades.get(i) < 38) {
+                listStudents.add(grades.get(i));
+            } else if (grades.get(i) >= 38) {
+                if (grades.get(i) % 5 == 3) {
+                    listStudents.add(grades.get(i) + 2);
+                } else if (grades.get(i) % 5 == 4) {
+                    listStudents.add(grades.get(i)  + 1);
+                } else {
+                    listStudents.add(grades.get(i));
+                }
+            }
+
+        }
+
+        return listStudents;
     }
 
 
 
     public static void main(String[] args) {
-        //Find the character that is repeating the maximum number
-        // of times and determine if its occurrence is odd or
-        // even (using Stream API) for input: “aabbbccccddddd”
 
-        System.out.println();
 
-        Map.Entry<String, Boolean> entry = maxRepeatedLetterIsOdd("aabbbbbbbbbbbbbbbbbbccccddddd");
-
-        System.out.println(entry.getKey() + " " + entry.getValue());
-        System.out.println(entry.getValue());
+        System.out.println(1%5);
     }
 }
